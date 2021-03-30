@@ -1,15 +1,15 @@
 from flask import Flask, jsonify, request
-from bertopic import BERTopic
 from settings import get_parameter_by_key
 from services.client_service import ClientService
+from exceptions.access_denied_exception import AccessDeniedException
+from bertopic import BERTopic
 
 app = Flask(__name__)
-
 topic_model = BERTopic()
 topic_model.load("model")
 
 
-@app.route('/topics')
+@app.route('/api/v1/topics')
 def get_topics_by_text():
     try:
         ClientService.check_access(request=request.args)
