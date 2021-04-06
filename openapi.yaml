@@ -1,0 +1,49 @@
+openapi: 3.0.1
+info:
+  title: TPS - Topic predictor service
+  description: |+
+    Service to predict topics for texts
+  version: 1.0.0
+servers:
+  - url: 'http://tps./api/v1'
+    description: 'DEV API v1'
+tags:
+  - name: Topics
+paths:
+  /topics:
+    get:
+      tags:
+        - Topics
+      parameters:
+        - in: query
+          name: text
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: TPS_PUBLIC_ID
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: TPS_SECRET_KEY
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                description: hash where keys are topic names and values are probability
+                example: { 'topic_name_1': 0.53, 'topic_name_2': 0.29, 'topic_name_3': 0.18 }
+        403:
+          description: Access denied
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
