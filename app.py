@@ -1,6 +1,5 @@
 from bertopic import BERTopic
 from flask import Flask, jsonify, request
-
 from exceptions.access_denied_exception import AccessDeniedException
 from services.client_service import ClientService
 from settings import get_parameter_by_key
