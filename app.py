@@ -1,11 +1,13 @@
 from bertopic import BERTopic
 from flask import Flask, jsonify, request
+
 from exceptions.access_denied_exception import AccessDeniedException
 from services.client_service import ClientService
+from services.topic_predictor_service import TopicPredictorService
 from settings import get_parameter_by_key
 
 app = Flask(__name__)
-topic_model = BERTopic()
+topic_model = BERTopic(language="multilingual")
 topic_model.load("model")
 
 
@@ -17,12 +19,13 @@ def get_topics_by_text():
 
     try:
         ClientService.check_access(request=req)
+        tps = TopicPredictorService(topic_model=topic_model)
+
+        return jsonify(tps.predict_topics(text=req["text"]))
     except AccessDeniedException as e:
         return jsonify({"message": str(e)}), 403
-    except Exception as e:
-        return jsonify({"message": str(e)}), 500
-
-    return jsonify(topic_model.find_topics(request.args.get("text")))
+    except Exception:
+        return jsonify({"message": "Internal server error"}), 500
 
 
 if __name__ == '__main__':
