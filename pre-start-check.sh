@@ -1,6 +1,7 @@
 #!/bin/bash
 
-pathToTrainedModel="model"
+fullPathToProject=`pwd`
+pathToTrainedModel="$fullPathToProject/model"
 
 echo "Check that trained file $pathToTrainedModel model is exists"
 if [[ ! -f "$pathToTrainedModel" ]]; then
